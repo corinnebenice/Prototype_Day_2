@@ -91,6 +91,8 @@ function preload() {
 
   font = loadFont("NeutralStd-Regular.otf");
 
+  img = loadImage('arrow.png');
+
   // font = loadFont("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
 }
 
@@ -306,9 +308,21 @@ function setup() {
   // textSize(80);
   fill(0);
   // text(selectedcountry, 50, 180);
-  textSize(40);
+
+  push();
+  scale(0.3);
+  image(img, windowWidth*2.3, windowHeight*0.7);
+  pop();
+
   textAlign(CENTER);
-  text("Scroll the grey bar!", windowWidth / 2, windowHeight / 2);
+  textSize(60);
+  text("Forest area per country", windowWidth / 2, (windowHeight / 2)-40);
+  textSize(40);
+  text("Scroll the grey bar to navigate between countries.", windowWidth / 2, (windowHeight / 2)+20);
+
+  textAlign(LEFT);
+  textSize(20);
+  text("Pro tip: try to find Russia, and your home country!", 100, 150);
 
   console.log(outside);
 
