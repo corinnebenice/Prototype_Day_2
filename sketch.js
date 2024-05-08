@@ -63,8 +63,8 @@ var circles = [];
 
 let pos, colors;
 let colors_tundra, colors_taiga, colors_deciduous, colors_desert, colors_steppe, colors_savanna, colors_med;
-let colors_boreal, colors_temperal, colors_tropical, colors_subtropical;
-var moveSpeed = 0.5;
+let colors_boreal, colors_temperal, colors_tropical, colors_subtropical, colors_growth;
+var moveSpeed = 0.3;
 const moveScale = 800;
 // var moveScale = 0;
 var scaletest = 0;
@@ -79,7 +79,7 @@ var tree_area;
 
 var minforest, maxforest;
 var ellipseSize;
-var amount_boreal, amount_subtrop, amount_temperal, amount_tropical;
+var amount_boreal, amount_subtrop, amount_temperal, amount_tropical, amount_growth;
 
 
 function preload() {
@@ -318,11 +318,11 @@ function setup() {
   textSize(60);
   text("Forest area per country", windowWidth / 2, (windowHeight / 2)-40);
   textSize(40);
-  text("Scroll the grey bar to navigate between countries.", windowWidth / 2, (windowHeight / 2)+20);
+  text("Scroll the grey bar to navigate between countries", windowWidth / 2, (windowHeight / 2)+20);
 
   textAlign(LEFT);
   textSize(20);
-  text("Pro tip: try to find Russia, and your home country!", 100, 150);
+  text("Pro tip: try to find Russia and your home country!", 100, 150);
 
   console.log(outside);
 
@@ -382,6 +382,7 @@ function draw() {
   amount_subtrop = outside.filter((el) => el.name == selectedcountry)[0].subtropics * 1;
   amount_temperal = outside.filter((el) => el.name == selectedcountry)[0].temperate * 1;
   amount_tropical = outside.filter((el) => el.name == selectedcountry)[0].tropics * 1;
+  amount_growth = outside.filter((el) => el.name == selectedcountry)[0].gain * 1;
   var total_amount = amount_boreal + amount_subtrop + amount_temperal + amount_tropical;
   // console.log(amount_boreal, amount_subtrop, amount_temperal, amount_tropical, total_amount);
 
@@ -389,6 +390,10 @@ function draw() {
   var perc_temperal = floor(map(amount_temperal, 0, total_amount, 0, blocksamount));
   var perc_tropical = floor(map(amount_tropical, 0, total_amount, 0, blocksamount));
   var perc_subtropical = floor(map(amount_subtrop, 0, total_amount, 0, blocksamount));
+  var perc_growth = floor(map(amount_growth, 0, total_amount, 0, blocksamount));
+
+  console.log(currentCountryObject.gain);
+  console.log(perc_growth);
 
   // console.log(perc_boreal, perc_subtropical, perc_temperal, perc_tropical);
 
@@ -400,7 +405,7 @@ function draw() {
   if (scaletest > 6){
     translate(-(windowWidth/2),-(windowHeight/3*2));
   }
-  for (ax = 0; ax <= drawlines - 1; ax++) {
+  for (ax = 0; ax <= pos.length - 1; ax++) {
     with (pos[ax]) {
       let angle = noise(x / movescaleSize, y / movescaleSize) * TWO_PI * movescaleSize;//
       x += cos(angle) * moveSpeed;
@@ -412,61 +417,21 @@ function draw() {
       // 	y = random(height);
       // }
     }
+    if (ax > blocksamount){
+      with (pos[ax]) {
+        let angle = noise(x / movescaleSize, y / movescaleSize) * TWO_PI * movescaleSize;//
+        x += cos(angle) * moveSpeed*2;
+        y += sin(angle) * moveSpeed*2;
+        fill(c);
+        ellipse(x, y, ellipseSize);
+        // if(x > width || x < 0 || y > height || y < 0 || random(1) < 0.008){
+        // 	x = random(width);
+        // 	y = random(height);
+        // }
+      }
+    }
   }
   pop();
-  // for (ax = 0; ax <= draw_boreal - 1; ax++) {
-  //   with (pos_boreal[ax]) {
-  //     let angle = noise(x / movescaleSize, y / movescaleSize) * TWO_PI * movescaleSize;//
-  //     x += cos(angle) * moveSpeed;
-  //     y += sin(angle) * moveSpeed;
-  //     fill(255, 0, 0);
-  //     ellipse(x, y, ellipseSize);
-  //     // if(x > width || x < 0 || y > height || y < 0 || random(1) < 0.008){
-  //     // 	x = random(width);
-  //     // 	y = random(height);
-  //     // }
-  //   }
-  // }
-  // for (ax = 0; ax <= draw_subtrop - 1; ax++) {
-  //   with (pos_subtrop[ax]) {
-  //     let angle = noise(x / movescaleSize, y / movescaleSize) * TWO_PI * movescaleSize;//
-  //     x += cos(angle) * moveSpeed;
-  //     y += sin(angle) * moveSpeed;
-  //     fill(0);
-  //     ellipse(x, y, ellipseSize);
-  //     // if(x > width || x < 0 || y > height || y < 0 || random(1) < 0.008){
-  //     // 	x = random(width);
-  //     // 	y = random(height);
-  //     // }
-  //   }
-  // }
-  // for (ax = 0; ax <= draw_temperal - 1; ax++) {
-  //   with (pos_temperal[ax]) {
-  //     let angle = noise(x / movescaleSize, y / movescaleSize) * TWO_PI * movescaleSize;//
-  //     x += cos(angle) * moveSpeed;
-  //     y += sin(angle) * moveSpeed;
-  //     fill(0, 0, 255);
-  //     ellipse(x, y, ellipseSize);
-  //     // if(x > width || x < 0 || y > height || y < 0 || random(1) < 0.008){
-  //     // 	x = random(width);
-  //     // 	y = random(height);
-  //     // }
-  //   }
-  // }
-  // for (ax = 0; ax <= draw_tropical - 1; ax++) {
-  //   with (pos_tropical[ax]) {
-  //     let angle = noise(x / movescaleSize, y / movescaleSize) * TWO_PI * movescaleSize;//
-  //     x += cos(angle) * moveSpeed;
-  //     y += sin(angle) * moveSpeed;
-  //     fill(0, 255, 0);
-  //     ellipse(x, y, ellipseSize);
-  //     // if(x > width || x < 0 || y > height || y < 0 || random(1) < 0.008){
-  //     // 	x = random(width);
-  //     // 	y = random(height);
-  //     // }
-  //   }
-  // }
-  // pop();
 
   // console.log(outside.filter((el) => el.name == selectedcountry));
 
@@ -559,6 +524,14 @@ function draw() {
         c: colors_tropical[floor(random(colors_tropical.length))]
       });
     }
+    for (let x = 0; x < perc_growth + 1; x++) {
+      pos.push({
+        x: random(width),
+        y: random(height),
+        c: 'blue'
+      });
+    }
+    console.log(pos);
     // }
     // for (let i = 1; i < 10000; i++) {
     //   pos_boreal.push({
