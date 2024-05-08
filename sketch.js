@@ -62,10 +62,12 @@ let makewhite = false;
 var circles = [];
 
 let pos, colors;
-let colors_tundra, colors_taiga, colors_deciduous, colors_desert, colors_tropical, colors_steppe, colors_savanna, colors_med;
+let colors_tundra, colors_taiga, colors_deciduous, colors_desert, colors_steppe, colors_savanna, colors_med;
+let colors_boreal, colors_temperal, colors_tropical, colors_subtropical;
 var moveSpeed = 0.5;
 const moveScale = 800;
 // var moveScale = 0;
+var scaletest = 0;
 var movescaleSize = 0;
 
 var oldselectedcountry;
@@ -250,14 +252,19 @@ function setup() {
 
   noStroke();
   colors = [color("#406928"), color("#A3C945"), color("#1F4F6F"), color("#339798"), color("#52BC8F"), color("#76DB8F"), color("#C7EAC9")];
-  colors_tundra = [color("#A31B18"), color("#DBCF80"), color("#54583E"), color("#2E4E06")];
-  colors_taiga = [color("#6da35a"), color("#181d25"), color("#524736"), color("#61692f")];
-  colors_deciduous = [color("#e78e2a"), color("#a31b18"), color("#80b31d"), color("#eec02b")];
-  colors_desert = [color("#b86528"), color("#e78e2a"), color("#ffcb68"), color("#9d8f32")];
+  // colors_tundra = [color("#A31B18"), color("#DBCF80"), color("#54583E"), color("#2E4E06")];
+  // colors_taiga = [color("#6da35a"), color("#181d25"), color("#524736"), color("#61692f")];
+  // colors_deciduous = [color("#e78e2a"), color("#a31b18"), color("#80b31d"), color("#eec02b")];
+  // colors_desert = [color("#b86528"), color("#e78e2a"), color("#ffcb68"), color("#9d8f32")];
+  // colors_tropical = [color("#a31b18"), color("#dbcf80"), color("#54583e"), color("#2e4e06")];
+  // colors_steppe = [color("#a31b18"), color("#dbcf80"), color("#54583e"), color("#2e4e06")];
+  // colors_savanna = [color("#a31b18"), color("#dbcf80"), color("#54583e"), color("#2e4e06")];
+  // colors_med = [color("#a31b18"), color("#dbcf80"), color("#54583e"), color("#2e4e06")];
+
+  colors_temperal = [color("#e78e2a"), color("#a31b18"), color("#80b31d"), color("#eec02b")];
+  colors_boreal = [color("#6da35a"), color("#181d25"), color("#524736"), color("#61692f")];
   colors_tropical = [color("#a31b18"), color("#dbcf80"), color("#54583e"), color("#2e4e06")];
-  colors_steppe = [color("#a31b18"), color("#dbcf80"), color("#54583e"), color("#2e4e06")];
-  colors_savanna = [color("#a31b18"), color("#dbcf80"), color("#54583e"), color("#2e4e06")];
-  colors_med = [color("#a31b18"), color("#dbcf80"), color("#54583e"), color("#2e4e06")];
+  colors_subtropical = [color("#bca244"), color("#61692f"), color("#a3a130"), color("#858c50")];
 
   pos = [];
   for (let i = 10; i < 100000; i++) {
@@ -356,6 +363,7 @@ function draw() {
   // console.log(ellipseSize);
   // blocksamount = 5000/ellipseSize;
   blocksamount = 5000;
+
   amount_boreal = outside.filter((el) => el.name == selectedcountry)[0].boreal * 1;
   amount_subtrop = outside.filter((el) => el.name == selectedcountry)[0].subtropics * 1;
   amount_temperal = outside.filter((el) => el.name == selectedcountry)[0].temperate * 1;
@@ -372,11 +380,12 @@ function draw() {
 
   // var movescaleSize = floor(map(currentforestsize, minforest.forest_area, maxforest, 2000, 50));
 
-
   // console.log(outside.filter((el) => el.name == selectedcountry)[0].forest_area, ellipseSize);
-  // push();
-  // scale(ellipseSize);
-
+  push();
+  scale(scaletest);
+  if (scaletest > 6){
+    translate(-(windowWidth/2),-(windowHeight/3*2));
+  }
   for (ax = 0; ax <= drawlines - 1; ax++) {
     with (pos[ax]) {
       let angle = noise(x / movescaleSize, y / movescaleSize) * TWO_PI * movescaleSize;//
@@ -390,6 +399,7 @@ function draw() {
       // }
     }
   }
+  pop();
   // for (ax = 0; ax <= draw_boreal - 1; ax++) {
   //   with (pos_boreal[ax]) {
   //     let angle = noise(x / movescaleSize, y / movescaleSize) * TWO_PI * movescaleSize;//
@@ -457,6 +467,15 @@ function draw() {
     // console.log("true!");
     pos = [];
     drawlines = blocksamount;
+    // scaletest = random(1,15);
+    scaletest = floor(map(currentforestsize, 10000, maxforest, 8, 1));
+    if (scaletest < 1){
+      scaletest = 1;
+    }
+    if (scaletest > 8){
+      scaletest = 8;
+    }
+    console.log(scaletest);
     movescaleSize = random(600, 900);
     // draw_boreal = amount_boreal/5000;
     // draw_subtrop = amount_subtrop/5000;
@@ -502,28 +521,28 @@ function draw() {
       pos.push({
         x: random(width),
         y: random(height),
-        c: 'red'
+        c: colors_boreal[floor(random(colors_boreal.length))]
       });
     }
     for (let x = 0; x < perc_subtropical + 1; x++) {
       pos.push({
         x: random(width),
         y: random(height),
-        c: 'green'
+        c: colors_subtropical[floor(random(colors_subtropical.length))]
       });
     }
     for (let x = 0; x < perc_temperal + 1; x++) {
       pos.push({
         x: random(width),
         y: random(height),
-        c: 'blue'
+        c: colors_temperal[floor(random(colors_temperal.length))]
       });
     }
     for (let x = 0; x < perc_tropical + 1; x++) {
       pos.push({
         x: random(width),
         y: random(height),
-        c: 'yellow'
+        c: colors_tropical[floor(random(colors_tropical.length))]
       });
     }
     // }
